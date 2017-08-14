@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+
+
+# TODO: add logging with Logging level
+# https://github.com/josegonzalez/python-github-backup/blob/master/bin/github-backup
+# import logging
+
+# https://stackoverflow.com/questions/6323860/sibling-package-imports
+# Ugly hack to allow absolute import from the root folder
+# whatever its name is. Please forgive the heresy.
+if __name__ == "__main__" and __package__ is None:
+    from sys import path
+    from os.path import dirname as dir
+
+    path.append(dir(path[0]))
+    __package__ = "examples"
+
+import json
+from toolbox.people import *
+from toolbox.cli import parse_args
+
+
+def main():
+    args, unknown = parse_args()
+    print("input args were: ", args)
+
+    # user mgmt
+    result = retrieve_users(args)
+    print (len(result))
+    # save to file for further analysis
+    with open('data.data', 'w') as outfile:
+        json.dump(result, outfile)
+
+    # get LOGIN which a key to get detailed personal info.
+    peep_result = []
+    for people in result:
+        peep_result.append(people["login"])
+
+    with open('peep.data', 'w') as outfile:
+        json.dump(peep_result, outfile)
+
+
+if __name__ == '__main__':
+    main()
