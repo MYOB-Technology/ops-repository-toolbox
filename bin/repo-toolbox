@@ -18,26 +18,50 @@ if __name__ == "__main__" and __package__ is None:
 import json
 from toolbox.people import *
 from toolbox.cli import parse_args
+from toolbox.repo import get_repo_size
 
 
 def main():
     args, unknown = parse_args()
     print("input args were: ", args)
 
-    # user mgmt
-    result = retrieve_users(args)
-    print (len(result))
-    # save to file for further analysis
-    with open('data.data', 'w') as outfile:
-        json.dump(result, outfile)
+    # # user mgmt
+    # result = retrieve_users(args)
+    # print (len(result))
+    # # save to file for further analysis
+    # with open('data.data', 'w') as outfile:
+    #     json.dump(result, outfile)
 
-    # get LOGIN which a key to get detailed personal info.
-    peep_result = []
-    for people in result:
-        peep_result.append(people["login"])
+    # print('getting people login names')
+    # # get LOGIN which a key to get detailed personal info
+    # # in the following steps.
+    # peep_login_names = []
+    # for people in result:
+    #     peep_login_names.append(people["login"])
+    # with open('peep.data', 'w') as outfile:
+    #     json.dump(peep_login_names, outfile)
 
-    with open('peep.data', 'w') as outfile:
-        json.dump(peep_result, outfile)
+    # print('querying member details...')
+    # peep_detail = []
+    # for peep_login_name in peep_login_names:
+    #     peep_detail.append(retrieve_user_details(args, peep_login_name))
+
+    # with open('peep_detail.data', 'w') as outfile:
+    #     json.dump(peep_detail, outfile)
+
+
+
+    # userinfo = retrieve_user_details(args, 'songGithub')
+    # userinfo = retrieve_user_details(args, 'Sannat')
+    # print(
+    #     userinfo['two_factor_authentication'], '\n',
+    #     userinfo['email'],'\n',
+    #     userinfo['name'],'\n',
+    #  )
+
+    # get sum size of an Org's repos
+    repos = get_repo_size(args)
+    print(repos)
 
 
 if __name__ == '__main__':
