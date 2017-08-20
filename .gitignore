@@ -3,8 +3,11 @@
 
 # Sensitive files
 env
-*.data
 
+# local specific files
+*.sublime-project
+*.data
+*.db
 
 # Not ready/necessary to commit to remote repo
-settings.py
+.DS_Store

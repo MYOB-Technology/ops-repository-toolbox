@@ -107,7 +107,6 @@ def _construct_request(per_page, page, query_args, template, auth):
     request = Request(template + '?' + querystring)
     if auth is not None:
         request.add_header('Authorization', auth)
-    print("headers= ", request.headers)
     return request
 
 

@@ -1,10 +1,15 @@
 from toolbox.connect_api import get_github_api_host, retrieve_data
 import json
+from hurry.filesize import size, alternative
+
+
+def get_readible_file_size(filesize):
+    return size(filesize, system=alternative)
 
 
 def get_repo_size(args):
 
-    print('\n','getting info for SUM of Github repo in org= : {}'.format(args.user))
+    print('\n','getting info for SUM size of Github repo for org : {}'.format(args.user))
     single_request = False
     template = 'https://{0}/orgs/{1}/repos'.format(
         get_github_api_host(args),
@@ -18,4 +23,4 @@ def get_repo_size(args):
     size_sum = 0
     for repo in repoinfo:
         size_sum += repo['size']
-    return size_sum
+    return get_readible_file_size(size_sum)
