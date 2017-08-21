@@ -7,7 +7,7 @@ env
 # local specific files
 *.sublime-project
 *.sublime-workspace
-*.data
+*.csv
 *.db
 
 # Not ready/necessary to commit to remote repo
