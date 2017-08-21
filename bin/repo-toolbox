@@ -31,17 +31,35 @@ def write_csv(args, filename, keys, input_content):
             content_dict = retrieve_user_details(args=args, github_acct_name=item, keys=keys)
             writer.writerow(content_dict[key] for key in keys)
 
+
+def write_csv_detail_retrieved(args, filename, keys, input_content):
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',', dialect='excel')
+        writer.writerow(key for key in keys)
+        for item in input_content:
+            content_dict = item
+            writer.writerow(content_dict[key] for key in keys)
+
+
 def main():
     args, unknown = parse_args()
     print("input args were: ", args)
 
-    # # user mgmt
-    parsed_results = get_2fa_disabled_members(args)
-    keys = ['login','email','name']
-    write_csv(args,'member-no-2fa.csv', keys, parsed_results)
+    # # # user mgmt
+    # parsed_results = get_2fa_disabled_members(args)
+    # keys = ['login','email','name']
+    # write_csv(args,'member-no-2fa.csv', keys, parsed_results)
 
-    parsed_results = get_2fa_disabled_outside_contributors(args)
-    write_csv(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+    # parsed_results = get_2fa_disabled_outside_contributors(args)
+    # write_csv(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+
+    keys = ['login','email','name']
+    parsed_results = get_nameless_members(args, keys)
+    write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
+
+    parsed_results = get_nameless_outside_contributors(args, keys)
+    write_csv_detail_retrieved(args, 'nameless_outside_contributors.csv', keys, parsed_results)
+
 
     # get sum size of an Org's repos
     # repos = get_repo_size(args)

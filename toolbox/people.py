@@ -14,9 +14,28 @@ def retrieve_users(args, get_2fa_disabled=False):
         print('retrieve users who DID NOT enable 2fa from an organization')
 
     else:
-        print('retrieve users from an organization')
+        print('retrieve all members from an organization')
 
     template = 'https://{0}/orgs/{1}/members'.format(
+        get_github_api_host(args),
+        args.user)
+
+    return retrieve_data(args, template, single_request=single_request, query_args=query_args)
+
+
+def retrieve_outsidecontributors(args, get_2fa_disabled=False):
+    single_request = False
+    query_args = None
+
+    if get_2fa_disabled:
+        query_args = {'filter':'2fa_disabled'}
+        # get those who don't enable 2FA in our Org
+        print('retrieve outside_contributors who DID NOT enable 2fa from an organization')
+
+    else:
+        print('retrieve users from an organization')
+
+    template = 'https://{0}/orgs/{1}/outside_collaborators'.format(
         get_github_api_host(args),
         args.user)
 
@@ -39,27 +58,8 @@ def retrieve_user_details(args,github_acct_name,keys):
     return returning_results
 
 
-def retrieve_outsidecontributors(args, get_2fa_disabled=False):
-    single_request = False
-    query_args = None
-
-    if get_2fa_disabled:
-        query_args = {'filter':'2fa_disabled'}
-        # get those who don't enable 2FA in our Org
-        print('retrieve outside_contributors who DID NOT enable 2fa from an organization')
-
-    else:
-        print('retrieve users from an organization')
-
-    template = 'https://{0}/orgs/{1}/outside_collaborators'.format(
-        get_github_api_host(args),
-        args.user)
-
-    return retrieve_data(args, template, single_request=single_request, query_args=query_args)
-
-
 def get_2fa_disabled_members(args):
-    # print Members who don't do 2FA, excluding easily identifiable machine users
+    # Members who don't do 2FA, excluding easily identifiable machine users
     result = retrieve_users(args, get_2fa_disabled=True)
     parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
     print (len(parsed_results))
@@ -67,8 +67,35 @@ def get_2fa_disabled_members(args):
 
 
 def get_2fa_disabled_outside_contributors(args):
-    # print OutsideContributors who don't do 2FA, excluding easily identifiable machine users
+    # OutsideContributors who don't do 2FA, excluding easily identifiable machine users
     result = retrieve_outsidecontributors(args, get_2fa_disabled=True)
     parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
     print (len(parsed_results))
     return parsed_results
+
+def get_nameless_members(args,keys):
+    result = retrieve_users(args)
+    # a list of org member login, excluding logins from an exemption list.
+    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
+    nameless_members = []
+
+    for individual_login in parsed_results:
+        details = retrieve_user_details(args=args, github_acct_name=individual_login, keys=keys)
+        if not details['name']:
+            print('NAMELESS!!! ')
+            nameless_members.append(details)
+    return nameless_members
+
+
+def get_nameless_outside_contributors(args,keys):
+    result = retrieve_outsidecontributors(args)
+    # a list of org member login, excluding logins from an exemption list.
+    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
+    nameless_outside_contributors = []
+
+    for individual_login in parsed_results:
+        details = retrieve_user_details(args=args, github_acct_name=individual_login, keys=keys)
+        if not details['name']:
+            print('NAMELESS!!! ')
+            nameless_outside_contributors.append(details)
+    return nameless_outside_contributors
