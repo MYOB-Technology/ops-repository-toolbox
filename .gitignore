@@ -6,6 +6,7 @@ env
 
 # local specific files
 *.sublime-project
+*.sublime-workspace
 *.data
 *.db
 

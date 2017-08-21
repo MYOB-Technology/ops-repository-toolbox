@@ -16,84 +16,32 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "examples"
 
 import json
-import csv
 from toolbox.people import *
 from toolbox.cli import parse_args
 from toolbox.repo import get_repo_size, get_repo_size
-from settings import KNOWN_MACHINE_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS
 
+
+import csv
+def write_csv(args, filename, keys, input_content):
+    '''csv writer for header line and content rows'''
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',', dialect='excel')
+        writer.writerow(key for key in keys)
+        for item in input_content:
+            content_dict = retrieve_user_details(args=args, github_acct_name=item, keys=keys)
+            writer.writerow(content_dict[key] for key in keys)
 
 def main():
     args, unknown = parse_args()
     print("input args were: ", args)
 
     # # user mgmt
+    parsed_results = get_2fa_disabled_members(args)
+    keys = ['login','email','name']
+    write_csv(args,'member-no-2fa.csv', keys, parsed_results)
 
-    # print Members who don't do 2FA, excluding easily identifiable machine users
-    result = retrieve_users(args, get_2fa_disabled=True)
-    print (len(result))
-
-    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
-    print (parsed_results)
-
-
-    print('querying org members details who don\'t do 2fa, and save to CSV')
-    keys = [
-        'login',
-        'email',
-        'name']
-
-    with open('member-no-2fa.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',', dialect='excel')
-        writer.writerow(key for key in keys)
-        for peep_login_name in parsed_results:
-            content_dict = retrieve_user_details(args=args, github_acct_name=peep_login_name, keys=keys)
-            writer.writerow(content_dict[key] for key in keys)
-
-
-    # print OutsideContributors who don't do 2FA, excluding easily identifiable machine users
-    # result = retrieve_outsidecontributors(args, get_2fa_disabled=True)
-    # parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
-    # print (len(result))
-    # print (parsed_results)
-
-
-
-
-
-    # # save to file for further analysis
-    # with open('data.data', 'w') as outfile:
-    #     json.dump(result, outfile)
-
-    # print('getting people login names')
-    # # get LOGIN which a key to get detailed personal info
-    # # in the following steps.
-    # peep_login_names = []
-    # for people in result:
-    #     peep_login_names.append(people["login"])
-    # with open('peep.data', 'w') as outfile:
-    #     json.dump(peep_login_names, outfile)
-
-    # print('querying member details...')
-    # peep_detail = []
-    # for peep_login_name in peep_login_names:
-    #     peep_detail.append(retrieve_user_details(args, peep_login_name))
-
-    # with open('peep_detail.data', 'w') as outfile:
-    #     json.dump(peep_detail, outfile)
-
-
-
-    # userinfo = retrieve_user_details(args, 'songGithub')
-    # userinfo = retrieve_user_details(args, 'Sannat')
-    # print(userinfo)
-    # userinfo = retrieve_user_details(args, 'EssentialsCI')
-    # print(userinfo)
-    # print(
-    #     userinfo['two_factor_authentication'], '\n',
-    #     userinfo['email'],'\n',
-    #     userinfo['name'],'\n',
-    #  )
+    parsed_results = get_2fa_disabled_outside_contributors(args)
+    write_csv(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
 
     # get sum size of an Org's repos
     # repos = get_repo_size(args)

@@ -1,5 +1,6 @@
 import json
 from toolbox.connect_api import get_github_api_host, retrieve_data
+from settings import KNOWN_MACHINE_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS
 import csv
 
 def retrieve_users(args, get_2fa_disabled=False):
@@ -55,3 +56,19 @@ def retrieve_outsidecontributors(args, get_2fa_disabled=False):
         args.user)
 
     return retrieve_data(args, template, single_request=single_request, query_args=query_args)
+
+
+def get_2fa_disabled_members(args):
+    # print Members who don't do 2FA, excluding easily identifiable machine users
+    result = retrieve_users(args, get_2fa_disabled=True)
+    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
+    print (len(parsed_results))
+    return parsed_results
+
+
+def get_2fa_disabled_outside_contributors(args):
+    # print OutsideContributors who don't do 2FA, excluding easily identifiable machine users
+    result = retrieve_outsidecontributors(args, get_2fa_disabled=True)
+    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
+    print (len(parsed_results))
+    return parsed_results
