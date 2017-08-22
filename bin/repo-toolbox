@@ -24,11 +24,18 @@ from toolbox.repo import get_repo_size, get_repo_size
 import csv
 def write_csv(args, filename, keys, input_content):
     '''csv writer for header line and content rows'''
+    # with open(filename, 'w', newline='') as csvfile:
+
+    # print Members who don't do 2FA, excluding easily identifiable machine users
+    result = retrieve_users(args, get_2fa_disabled=True)
+    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
+    print ('There were {} of these guys. '.format(len(parsed_results)))
+
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',', dialect='excel')
         writer.writerow(key for key in keys)
         for item in input_content:
-            content_dict = retrieve_user_details(args=args, github_acct_name=item, keys=keys)
+            content_dict = retrieve_user_details(args=args, github_acct_name=input_content, keys=keys)
             writer.writerow(content_dict[key] for key in keys)
 
 
@@ -39,7 +46,6 @@ def write_csv_detail_retrieved(args, filename, keys, input_content):
         for item in input_content:
             content_dict = item
             writer.writerow(content_dict[key] for key in keys)
-
 
 def main():
     args, unknown = parse_args()

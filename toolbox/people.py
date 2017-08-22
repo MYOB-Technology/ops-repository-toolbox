@@ -1,7 +1,7 @@
 import json
 from toolbox.connect_api import get_github_api_host, retrieve_data
 from settings import KNOWN_MACHINE_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS
-import csv
+import re
 
 def retrieve_users(args, get_2fa_disabled=False):
     '''get all members from an Organization'''
@@ -44,7 +44,7 @@ def retrieve_outsidecontributors(args, get_2fa_disabled=False):
 
 def retrieve_user_details(args,github_acct_name,keys):
     '''get a specific user detail info, given his github acct name'''
-    print('\n','getting user detailed info for Github user: {}'.format(github_acct_name))
+    # print('\n','getting user detailed info for Github user: {}'.format(github_acct_name))
 
     single_request = True
     template = 'https://{0}/users/{1}'.format(
@@ -54,7 +54,7 @@ def retrieve_user_details(args,github_acct_name,keys):
 
     userinfo = retrieve_data(args, template, single_request=single_request)[0]
     returning_results = ({key:userinfo[key] for key in keys})
-    print("returning result: ", returning_results)
+    print(returning_results)
     return returning_results
 
 
@@ -86,7 +86,6 @@ def get_nameless_members(args,keys):
             nameless_members.append(details)
     return nameless_members
 
-
 def get_nameless_outside_contributors(args,keys):
     result = retrieve_outsidecontributors(args)
     # a list of org member login, excluding logins from an exemption list.
@@ -99,3 +98,30 @@ def get_nameless_outside_contributors(args,keys):
             print('NAMELESS!!! ')
             nameless_outside_contributors.append(details)
     return nameless_outside_contributors
+
+
+def remove_member(args, github_acct_name):
+
+    single_request = True
+    print('verifying membership for {}...'.format(github_acct_name))
+    template = 'https://{0}/orgs/{1}/outside_collaborators'.format(
+        get_github_api_host(args),
+        args.user)
+
+    result = retrieve_data(args, template, single_request=single_request)
+    namelist = [item['login'] for item in result]
+    if github_acct_name in namelist:
+        print ('login name verified...')
+        template = 'https://{0}/orgs/{1}/outside_collaborators/{2}'.format(
+            get_github_api_host(args),
+            args.user,
+            github_acct_name)
+        # TODO: send http-delete
+    else:
+        print ('login name NOT verified...')
+        return None
+
+
+def retrieve_nameless_users():
+   # TODO.
+   pass
