@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+
+
+# TODO: add logging with Logging level
+# https://github.com/josegonzalez/python-github-backup/blob/master/bin/github-backup
+# import logging
+
+# https://stackoverflow.com/questions/6323860/sibling-package-imports
+# Ugly hack to allow absolute import from the root folder
+# whatever its name is. Please forgive the heresy.
+if __name__ == "__main__" and __package__ is None:
+    from sys import path
+    from os.path import dirname as dir
+
+    path.append(dir(path[0]))
+    __package__ = "examples"
+
+import json
+from toolbox.people import (get_nameless_members,
+                            get_nameless_outside_contributors,
+                            get_2fa_disabled_members,
+                            get_2fa_disabled_outside_contributors,
+                            expand_user_details)
+from toolbox.cli import parse_args
+from toolbox.repo import get_repo_size, get_repo_size
+from toolbox.csv import write_csv_detail_retrieved
+
+from redis import Redis
+
+def main():
+    args, unknown = parse_args()
+    print (args)
+    # Config level of user details you want to retrieve from API returned results
+    keys = ['login','email','name']
+    entries = []
+    # # user mgmt
+    # list_2fa_disabled_members = get_2fa_disabled_members(args)
+    # parsed_results = expand_user_details(args, list_2fa_disabled_members, keys)
+    # write_csv_detail_retrieved(args,'member-no-2fa.csv', keys, parsed_results)
+
+    # parsed_results = get_nameless_members(args, keys)
+    # write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
+    list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
+    parsed_results = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
+    write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+
+    # parsed_results = get_nameless_outside_contributors(args, keys)
+    # write_csv_detail_retrieved(args, 'nameless_outside_contributors.csv', keys, parsed_results)
+
+
+    # get sum size of an Org's repos
+    # repos = get_repo_size(args)
+    # print(repos)
+
+
+if __name__ == '__main__':
+    redis = Redis(host='redis', port=6379)
+    main()

@@ -1,0 +1,14 @@
+# Python related files
+*.pyc
+
+# Sensitive files
+env
+
+# local specific files
+*.sublime-project
+*.sublime-workspace
+*.csv
+*.db
+
+# Not ready/necessary to commit to remote repo
+.DS_Store
