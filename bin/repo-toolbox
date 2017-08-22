@@ -16,55 +16,34 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "examples"
 
 import json
-from toolbox.people import *
+from toolbox.people import (get_nameless_members,
+                            get_nameless_outside_contributors,
+                            get_2fa_disabled_members,
+                            get_2fa_disabled_outside_contributors,
+                            expand_user_details)
 from toolbox.cli import parse_args
 from toolbox.repo import get_repo_size, get_repo_size
-
-
-import csv
-def write_csv(args, filename, keys, input_content):
-    '''csv writer for header line and content rows'''
-    # with open(filename, 'w', newline='') as csvfile:
-
-    # print Members who don't do 2FA, excluding easily identifiable machine users
-    result = retrieve_users(args, get_2fa_disabled=True)
-    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
-    print ('There were {} of these guys. '.format(len(parsed_results)))
-
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',', dialect='excel')
-        writer.writerow(key for key in keys)
-        for item in input_content:
-            content_dict = retrieve_user_details(args=args, github_acct_name=input_content, keys=keys)
-            writer.writerow(content_dict[key] for key in keys)
-
-
-def write_csv_detail_retrieved(args, filename, keys, input_content):
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',', dialect='excel')
-        writer.writerow(key for key in keys)
-        for item in input_content:
-            content_dict = item
-            writer.writerow(content_dict[key] for key in keys)
+from toolbox.csv import write_csv_detail_retrieved
 
 def main():
     args, unknown = parse_args()
-    print("input args were: ", args)
-
-    # # # user mgmt
-    # parsed_results = get_2fa_disabled_members(args)
-    # keys = ['login','email','name']
-    # write_csv(args,'member-no-2fa.csv', keys, parsed_results)
-
-    # parsed_results = get_2fa_disabled_outside_contributors(args)
-    # write_csv(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
-
+    # Config level of user details you want to retrieve from API returned results
     keys = ['login','email','name']
-    parsed_results = get_nameless_members(args, keys)
-    write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
+    entries = []
+    # # user mgmt
+    # list_2fa_disabled_members = get_2fa_disabled_members(args)
+    # parsed_results = expand_user_details(args, list_2fa_disabled_members, keys)
+    # write_csv_detail_retrieved(args,'member-no-2fa.csv', keys, parsed_results)
 
-    parsed_results = get_nameless_outside_contributors(args, keys)
-    write_csv_detail_retrieved(args, 'nameless_outside_contributors.csv', keys, parsed_results)
+    # parsed_results = get_nameless_members(args, keys)
+    # write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
+
+    list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
+    parsed_results = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
+    write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+
+    # parsed_results = get_nameless_outside_contributors(args, keys)
+    # write_csv_detail_retrieved(args, 'nameless_outside_contributors.csv', keys, parsed_results)
 
 
     # get sum size of an Org's repos

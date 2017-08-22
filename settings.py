@@ -12,15 +12,16 @@ KNOWN_MACHINE_MEMBERS = [
         'myob-developers',
         'myob-platform-enablement-bot',
         'MYOB-TaxOnline',
-        'SalesforceGuru'
+        'SalesforceGuru',
+        'poopdeck-pappy'
     ]
 
 KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
-        'appsecure', #exteral contactors
+        'appsecure', # exteral contactors
         'alfred-mintwireless',
         'awshelpers',
         'banking-robot',
-        'billflowci',
+        'billflowci',  # cash-out tribe @thiago.campezzi
         'bsdmonitoruser',
         'cashbook-robot', ##Common Ledger Migration Tribe
         'coa-robot',
@@ -28,6 +29,6 @@ KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
         'myob-ad-build-agent',
         'myob-online-tax-deploy',
         'myob-builder',
-        'myob-mobile-team',
+        'myob-mobile-team', # cash-in tribe @andyk or @walid
         'myobbsduser',
     ]

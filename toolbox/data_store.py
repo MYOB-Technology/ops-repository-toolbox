@@ -46,7 +46,19 @@ class GithubUser(Base):
     # person = relationship(GithubUser)
 
 
-def init_db():
-    # create an engine that stores data in local dict as a file
-    engine = create_engine('sqlite:///toolbox.db')
-    Base.metadata.create_all(engine)
+# def init_db():
+#     # create an engine that stores data in local dict as a file
+#     engine = create_engine('sqlite:///toolbox.db')
+#     Base.metadata.create_all(engine)
+
+
+
+def upsert(args, entries, input):
+    '''
+        Business logic: get those who don't do 2FA && don't have valid names
+        input: 'login':{'email':<email>, 'name':<name>, 'two_fa_status':<T/F>}
+    '''
+    if input['login'] in entries:
+
+    else:
+
