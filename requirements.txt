@@ -1,8 +1,6 @@
-github3.py==1.0.0a4
 hurry.filesize==0.9
+redis==2.10.6
 requests==2.13.0
 six==1.10.0
-SQLAlchemy==1.1.13
 uritemplate==3.0.0
 uritemplate.py==3.0.2
-#urllib

@@ -25,6 +25,8 @@ from toolbox.cli import parse_args
 from toolbox.repo import get_repo_size, get_repo_size
 from toolbox.csv import write_csv_detail_retrieved
 
+from redis import Redis
+
 def main():
     args, unknown = parse_args()
     print (args)
@@ -52,4 +54,5 @@ def main():
 
 
 if __name__ == '__main__':
+    redis = Redis(host='redis', port=6379)
     main()
