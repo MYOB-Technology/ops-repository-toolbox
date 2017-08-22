@@ -27,6 +27,7 @@ from toolbox.csv import write_csv_detail_retrieved
 
 def main():
     args, unknown = parse_args()
+    print (args)
     # Config level of user details you want to retrieve from API returned results
     keys = ['login','email','name']
     entries = []
@@ -37,7 +38,6 @@ def main():
 
     # parsed_results = get_nameless_members(args, keys)
     # write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
-
     list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
     parsed_results = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
     write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', keys, parsed_results)

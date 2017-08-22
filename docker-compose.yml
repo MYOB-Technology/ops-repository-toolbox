@@ -1,0 +1,17 @@
+version: '2'
+services:
+  toolbox:
+    build: .
+    volumes:
+      - .:/code
+    environment:
+      - ORG_NAME=MYOB-Technology
+      - ORG_STATUS='True'
+      - TOKEN=$GITHUB_TOKEN
+    command: ['/code/bin/run']
+
+  test:
+    build: .
+    volumes:
+      - .:/code
+    command: nosetests --with-coverage

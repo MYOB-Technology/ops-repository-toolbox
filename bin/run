@@ -1,0 +1,6 @@
+#!/bin/sh
+
+./bin/repo-toolbox \
+    -u $ORG_NAME   \
+    -o $ORG_STATUS \
+    -t $TOKEN

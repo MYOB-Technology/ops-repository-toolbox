@@ -57,10 +57,10 @@ def retrieve_user_details(args, github_acct_name, keys):
 
 def expand_user_details(args, namelist, keys):
     if namelist['two_fa_status']:
-        return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist]
+        return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist['parsed_results']]
     else:
         ## TODO : add a key value to the dict
-        return [retrieve_user_details(args,github_acct_name,keys)['two_fa_status']:'False' for github_acct_name in namelist]
+        return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist['parsed_results']]
 
 def get_2fa_disabled_members(args):
     ''' Members who don't do 2FA, excluding easily identifiable machine users

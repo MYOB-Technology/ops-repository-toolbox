@@ -2,9 +2,10 @@ import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Manage a github account')
-    parser.add_argument('user',
-                        metavar='USER',
-                        type=str,
+
+    parser.add_argument('-u',
+                        '--user',
+                        dest='user',
                         help='github username')
     parser.add_argument('-t',
                         '--token',
