@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from toolbox.connect_api import get_github_api_host, retrieve_data
 from settings import KNOWN_MACHINE_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS

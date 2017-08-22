@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 
 # TODO: add logging with Logging level
 # https://github.com/josegonzalez/python-github-backup/blob/master/bin/github-backup
@@ -33,19 +33,29 @@ def main():
     # Config level of user details you want to retrieve from API returned results
     keys = ['login','email','name']
     entries = []
-    # # user mgmt
+    # org member mgmt
+
     # list_2fa_disabled_members = get_2fa_disabled_members(args)
     # parsed_results = expand_user_details(args, list_2fa_disabled_members, keys)
     # write_csv_detail_retrieved(args,'member-no-2fa.csv', keys, parsed_results)
 
     # parsed_results = get_nameless_members(args, keys)
     # write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
-    list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
-    parsed_results = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
-    write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+
+
+    # outside contributor mgmt
+    # list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
+    # parsed_results = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
+    # write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+
+    # [rds.hmset(item['login'],item) for item in parsed_results]
+    # [print(rds.hgetall(item['login'])) for item in parsed_results]
+
+    # https://redis-py.readthedocs.io/en/latest/
+    print(rds.hexists('victrubajic','name'))
 
     # parsed_results = get_nameless_outside_contributors(args, keys)
-    # write_csv_detail_retrieved(args, 'nameless_outside_contributors.csv', keys, parsed_results)
+    # write_csv_detail_retrieved(args, 'outside_contributors_nameless.csv', keys, parsed_results)
 
 
     # get sum size of an Org's repos
@@ -54,5 +64,5 @@ def main():
 
 
 if __name__ == '__main__':
-    redis = Redis(host='redis', port=6379)
+    rds = Redis(host='redis', port=6379, charset="utf-8", decode_responses=True)
     main()
