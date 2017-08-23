@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from toolbox.connect_api import get_github_api_host, retrieve_data
-from settings import KNOWN_MACHINE_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS
+from settings import WHITELISTED_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS
 import re
 
 def retrieve_users(args, get_2fa_disabled=False):
@@ -57,22 +57,8 @@ def retrieve_user_details(args, github_acct_name, keys):
 
 
 def expand_user_details(args, namelist, keys):
-    # if namelist['two_fa_status']:
-
-    # valid_name_status = False
-    # two_fa_status = False
-
-    # list_user_details = []
-    # for github_acct_name in namelist['parsed_results']:
-    #     github_api_dict = retrieve_user_details(args,github_acct_name,keys)
-    #     github_api_dict['two_fa_status'] = namelist['two_fa_status']
-    #     list_user_details.append(github_api_dict)
-    # return list_user_details
-
-    #     return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist['parsed_results']]
-    # else:
-    #     ## TODO : add a key value to the dict
     return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist]
+
 
 def get_2fa_disabled_members(args):
     ''' Members who don't do 2FA, excluding easily identifiable machine users
@@ -123,16 +109,25 @@ def get_nameless_outside_contributors(args, keys):
     return nameless_outside_contributors
 
 
-def merge_2fa_nameless_members(args, list_2fa, list_nameless, keys):
+def merge_2fa_nameless_users(args, list_2fa, list_nameless, keys):
 
-    list_login_nameless = [user_detail['login'] for user_detail in list_nameless]
-    print(list_login_nameless)
+    nameless_users_logins = []
+
+    for user_detail in list_nameless:
+        user_detail['reject_reason'] = 'invalid name'
+        nameless_users_logins.append(user_detail['login'])
+
     for two_fa_disabled_user in list_2fa:
-        if two_fa_disabled_user not in list_login_nameless:
-            print('expanding original list with 2fa-disabled-only user {}'.format(two_fa_disabled_user))
-            list_nameless.append(retrieve_user_details(args, two_fa_disabled_user, keys))
+        if two_fa_disabled_user not in nameless_users_logins:
+            print('expanding original list with 2fa-disabled-only user: {}'.format(two_fa_disabled_user))
+            details = retrieve_user_details(args, two_fa_disabled_user, keys)
+            details['reject_reason']='2fa'
+            list_nameless.append(details)
         else:
             print('merging an user who did not do 2fa && have no valid name.. do nothing')
+            for item in list_nameless:
+                if item['login'] == two_fa_disabled_user:
+                    item['reject_reason'] += ',2fa'
     return list_nameless
 
 
