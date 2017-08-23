@@ -18,6 +18,7 @@ services:
     image: redis:3.2-alpine
     volumes:
       - redis_data:/data
+
   test:
     build: .
     volumes:

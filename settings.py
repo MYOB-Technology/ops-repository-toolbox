@@ -1,6 +1,12 @@
 TIME_ZONE = 'Australia/Victoria'
 
-KNOWN_MACHINE_MEMBERS = [
+WHITELISTED_MEMBERS = [
+    ]
+
+KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
+        'BaseApe',
+        'bumblenauts',
+        'appsecure', # exteral contactors
         'ausydautobuilds', # by all teamcity builds in Sydney
         'data-converter-jenkins', #Common Ledger Migration Tribe
         'droplet-ci', ##ex-tranquility
@@ -14,10 +20,6 @@ KNOWN_MACHINE_MEMBERS = [
         'MYOB-TaxOnline',
         'SalesforceGuru',
         'poopdeck-pappy'
-    ]
-
-KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
-        'appsecure', # exteral contactors
         'alfred-mintwireless',
         'awshelpers',
         'banking-robot',
@@ -31,4 +33,5 @@ KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
         'myob-builder',
         'myob-mobile-team', # cash-in tribe @andyk or @walid
         'myobbsduser',
+        'ledgercache-jenkins',
     ]

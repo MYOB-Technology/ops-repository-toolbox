@@ -1,4 +1,4 @@
-# ops-repo-toolbox
+# ops-github-toolbox
 [Placeholder for Build Kite Badge](https://google.com.au)
 
 ## Problems trying to solve
@@ -8,7 +8,11 @@
 
 - Rule enforcement
 
-For security reasons, we need to enforce 2FA, having email address on profile, as well as having real name (FirstName LastName) on profile.
+For security reasons, we need to enforce
+    - 2FA, having email address on profile
+    - real name (FirstName LastName) on profile
+    - all machine users should be outside collaborators instead of members
+    - machine users should all be outside collaborators
 
 
 - Kick alumni out
