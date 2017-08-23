@@ -1,4 +1,3 @@
-from toolbox.people import retrieve_users, retrieve_user_details
 import csv
 
 def write_csv_detail_retrieved(args, filename, keys, input_content):
