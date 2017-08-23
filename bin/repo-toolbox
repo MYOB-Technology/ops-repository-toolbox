@@ -20,7 +20,8 @@ from toolbox.people import (get_nameless_members,
                             get_nameless_outside_contributors,
                             get_2fa_disabled_members,
                             get_2fa_disabled_outside_contributors,
-                            expand_user_details)
+                            expand_user_details,
+                            merge_2fa_nameless_members)
 from toolbox.cli import parse_args
 from toolbox.repo import get_repo_size, get_repo_size
 from toolbox.csv import write_csv_detail_retrieved
@@ -32,32 +33,38 @@ def main():
     print (args)
     # Config level of user details you want to retrieve from API returned results
     keys = ['login','email','name']
-    entries = []
+    report_keys = ['login','email','name']
     # org member mgmt
-
     # list_2fa_disabled_members = get_2fa_disabled_members(args)
     # parsed_results = expand_user_details(args, list_2fa_disabled_members, keys)
     # write_csv_detail_retrieved(args,'member-no-2fa.csv', keys, parsed_results)
 
     # parsed_results = get_nameless_members(args, keys)
-    # write_csv_detail_retrieved(args, 'nameless_members.csv', keys, parsed_results)
+    # write_csv_detail_retrieved(args, 'members_nameless.csv', keys, parsed_results)
 
 
     # outside contributor mgmt
-    # list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
-    # parsed_results = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
-    # write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', keys, parsed_results)
+    list_2fa_disabled_outside_contributors = get_2fa_disabled_outside_contributors(args)
+    print(list_2fa_disabled_outside_contributors)
+    # results_2fa = expand_user_details(args, list_2fa_disabled_outside_contributors, keys)
+    # write_csv_detail_retrieved(args,'outside_contributors-no-2fa.csv', report_keys, result_2fa)
 
+    # # redis ops
     # [rds.hmset(item['login'],item) for item in parsed_results]
     # [print(rds.hgetall(item['login'])) for item in parsed_results]
 
-    # https://redis-py.readthedocs.io/en/latest/
-    print(rds.hexists('victrubajic','name'))
+    # # https://redis-py.readthedocs.io/en/latest/
+    # print(rds.hexists('victrubajic','name'))
 
-    # parsed_results = get_nameless_outside_contributors(args, keys)
-    # write_csv_detail_retrieved(args, 'outside_contributors_nameless.csv', keys, parsed_results)
-
-
+    results_nameless = get_nameless_outside_contributors(args, keys)
+    # write_csv_detail_retrieved(args, 'outside_contributors_nameless.csv', keys, results_nameless)
+    print (results_nameless)
+    merged = merge_2fa_nameless_members(
+        args,
+        list_2fa_disabled_outside_contributors,
+        results_nameless, keys)
+    print(merged)
+    write_csv_detail_retrieved(args, 'outside_contributors_merged.csv', keys, merged)
     # get sum size of an Org's repos
     # repos = get_repo_size(args)
     # print(repos)

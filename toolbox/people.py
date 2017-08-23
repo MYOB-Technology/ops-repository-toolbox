@@ -57,11 +57,22 @@ def retrieve_user_details(args, github_acct_name, keys):
 
 
 def expand_user_details(args, namelist, keys):
-    if namelist['two_fa_status']:
-        return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist['parsed_results']]
-    else:
-        ## TODO : add a key value to the dict
-        return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist['parsed_results']]
+    # if namelist['two_fa_status']:
+
+    # valid_name_status = False
+    # two_fa_status = False
+
+    # list_user_details = []
+    # for github_acct_name in namelist['parsed_results']:
+    #     github_api_dict = retrieve_user_details(args,github_acct_name,keys)
+    #     github_api_dict['two_fa_status'] = namelist['two_fa_status']
+    #     list_user_details.append(github_api_dict)
+    # return list_user_details
+
+    #     return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist['parsed_results']]
+    # else:
+    #     ## TODO : add a key value to the dict
+    return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist]
 
 def get_2fa_disabled_members(args):
     ''' Members who don't do 2FA, excluding easily identifiable machine users
@@ -70,7 +81,7 @@ def get_2fa_disabled_members(args):
     result = retrieve_users(args, get_2fa_disabled=True)
     parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
     print (len(parsed_results))
-    return {'parsed_results': parsed_results, 'two_fa_status': False}
+    return parsed_results
 
 
 def get_2fa_disabled_outside_contributors(args):
@@ -80,7 +91,7 @@ def get_2fa_disabled_outside_contributors(args):
     result = retrieve_outsidecontributors(args, get_2fa_disabled=True)
     parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
     print (len(parsed_results))
-    return {'parsed_results': parsed_results, 'two_fa_status': False}
+    return parsed_results
 
 
 def get_nameless_members(args,keys):
@@ -93,6 +104,7 @@ def get_nameless_members(args,keys):
         details = retrieve_user_details(args=args, github_acct_name=individual_login, keys=keys)
         if not details['name']:
             print('NAMELESS!!! ')
+            details['valid_name_status'] = False
             nameless_members.append(details)
     return nameless_members
 
@@ -109,6 +121,19 @@ def get_nameless_outside_contributors(args, keys):
             print('NAMELESS GUY FOUND...')
             nameless_outside_contributors.append(details)
     return nameless_outside_contributors
+
+
+def merge_2fa_nameless_members(args, list_2fa, list_nameless, keys):
+
+    list_login_nameless = [user_detail['login'] for user_detail in list_nameless]
+    print(list_login_nameless)
+    for two_fa_disabled_user in list_2fa:
+        if two_fa_disabled_user not in list_login_nameless:
+            print('expanding original list with 2fa-disabled-only user {}'.format(two_fa_disabled_user))
+            list_nameless.append(retrieve_user_details(args, two_fa_disabled_user, keys))
+        else:
+            print('merging an user who did not do 2fa && have no valid name.. do nothing')
+    return list_nameless
 
 
 def remove_member(args, github_acct_name):
