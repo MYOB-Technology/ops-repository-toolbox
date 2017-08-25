@@ -1,30 +1,18 @@
 version: '2'
 
-
 services:
   toolbox:
     build: .
     volumes:
       - .:/code
-    depends_on:
-      - redis
     environment:
       ORG_NAME: 'MYOB-Technology'
       ORG_STATUS: 'True'
       TOKEN: $GITHUB_TOKEN
     command: ['/code/bin/run']
 
-  redis:
-    image: redis:3.2-alpine
-    volumes:
-      - redis_data:/data
-
   test:
     build: .
     volumes:
       - .:/code
     command: nosetests --with-coverage
-
-
-volumes:
-  redis_data:

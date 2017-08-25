@@ -1,5 +1,7 @@
 TIME_ZONE = 'Australia/Victoria'
 
+RE_NAME = "^([a-zA-Z]{2,}\s{1}[a-zA-Z]{0,}'?-?[a-zA-Z]{1,}\s?([a-zA-Z]{1,})?)\s?([a-zA-Z]{1,})?"
+
 WHITELISTED_MEMBERS = [
     ]
 

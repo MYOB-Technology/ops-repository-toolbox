@@ -1,25 +1,30 @@
 # ops-github-toolbox
 [Placeholder for Build Kite Badge](https://google.com.au)
 
-## Problems trying to solve
+## Usage:
+- generate a personal token in your Github->settings->personal token _token_
+- In your terminal, run `export GITHUB_TOKEN=<YOUR GITHUB TOKEN>`
+- At same tab of the terminal, run `docker-compose run toolbox`
+- Have a coffee or two, csv report will be generated.
 
+## Problems trying to solve
 
 ### People Management
 
-- Rule enforcement
+1 Rule enforcement
 
-For security reasons, we need to enforce
-    - 2FA, having email address on profile
-    - real name (FirstName LastName) on profile
-    - all machine users should be outside collaborators instead of members
-    - machine users should all be outside collaborators
+For security reasons, we need to enforce:
+- 2FA, having email address on profile
+- real name (FirstName LastName) on profile
+- all machine users should be outside collaborators instead of members
+- machine users should all be outside collaborators
 
 
-- Kick alumni out
+1 Kick alumni out
 
 It is hard for a large organisation's Github repository maintainers to know if an user in the Github organisation is no longer working for the org and should be removed.
 
-- New-Starter manual burden
+1 New-Starter manual burden
 
 New team members need to come to us repo maintainers to request write access. Ideally, new members should be given access automatically if their name could be found in Active Directory service. _And Dev Leads should be assigned as team admin who can self-manage_
 

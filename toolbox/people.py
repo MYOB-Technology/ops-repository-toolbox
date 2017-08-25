@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
 from toolbox.connect_api import get_github_api_host, retrieve_data
-from settings import WHITELISTED_MEMBERS, KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS
 import re
+from settings import RE_NAME
 
-def retrieve_users(args, get_2fa_disabled=False):
+
+def retrieve_members(args, get_2fa_disabled=False):
     '''get all members from an Organization'''
     single_request = False
     query_args = None
@@ -60,53 +61,34 @@ def expand_user_details(args, namelist, keys):
     return [retrieve_user_details(args,github_acct_name,keys) for github_acct_name in namelist]
 
 
-def get_2fa_disabled_members(args):
+def get_2fa_disabled_members(args, input_users, whitelist):
     ''' Members who don't do 2FA, excluding easily identifiable machine users
         return: github login name
     '''
-    result = retrieve_users(args, get_2fa_disabled=True)
-    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
+    parsed_results = [ item['login'] for item in input_users if item['login'] not in whitelist]
     print (len(parsed_results))
     return parsed_results
 
 
-def get_2fa_disabled_outside_contributors(args):
-    ''' OutsideContributors who don't do 2FA, excluding easily identifiable machine users
-        return: github login name
-    '''
-    result = retrieve_outsidecontributors(args, get_2fa_disabled=True)
-    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
-    print (len(parsed_results))
-    return parsed_results
-
-
-def get_nameless_members(args,keys):
-    result = retrieve_users(args)
+def get_nameless_users(args, keys, all_org_users, whitelist):
     # a list of org member login, excluding logins from an exemption list.
-    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_MEMBERS ]
+    parsed_results = [ item['login'] for item in all_org_users if item['login'] not in whitelist ]
     nameless_members = []
 
     for individual_login in parsed_results:
         details = retrieve_user_details(args=args, github_acct_name=individual_login, keys=keys)
         if not details['name']:
             print('NAMELESS!!! ')
-            details['valid_name_status'] = False
+            details['reject_reason'] = 'name missing'
             nameless_members.append(details)
+        # https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
+
+        elif not re.match(RE_NAME, details['name']):
+            print("INVALID NAME: {}".format(details['name']))
+            details['reject_reason'] = 'invalid name'
+            nameless_members.append(details)
+
     return nameless_members
-
-
-def get_nameless_outside_contributors(args, keys):
-    result = retrieve_outsidecontributors(args)
-    # a list of org member login, excluding logins from an exemption list.
-    parsed_results = [ item['login'] for item in result if item['login'] not in KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS ]
-    nameless_outside_contributors = []
-
-    for individual_login in parsed_results:
-        details = retrieve_user_details(args=args, github_acct_name=individual_login, keys=keys)
-        if not details['name']:
-            print('NAMELESS GUY FOUND...')
-            nameless_outside_contributors.append(details)
-    return nameless_outside_contributors
 
 
 def merge_2fa_nameless_users(args, list_2fa, list_nameless, keys):
@@ -114,7 +96,7 @@ def merge_2fa_nameless_users(args, list_2fa, list_nameless, keys):
     nameless_users_logins = []
 
     for user_detail in list_nameless:
-        user_detail['reject_reason'] = 'invalid name'
+        # user_detail['reject_reason'] = 'invalid name'
         nameless_users_logins.append(user_detail['login'])
 
     for two_fa_disabled_user in list_2fa:
