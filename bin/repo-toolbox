@@ -36,26 +36,26 @@ def main():
     report_keys = ['login','email','name','reject_reason']
 
     # org member mgmt
-    # list_2fa_disabled_members = get_2fa_disabled_members(
-    #     args,
-    #     retrieve_members(args, get_2fa_disabled=True),
-    #     WHITELISTED_MEMBERS)
-    # # results_2fa_members = expand_user_details(args, list_2fa_disabled_members, query_keys)
-    # # write_csv_detail_retrieved(args,'member-no-2fa.csv', query_keys, parsed_results)
+    list_2fa_disabled_members = get_2fa_disabled_members(
+        args,
+        retrieve_members(args, get_2fa_disabled=True),
+        WHITELISTED_MEMBERS)
+    # results_2fa_members = expand_user_details(args, list_2fa_disabled_members, query_keys)
+    # write_csv_detail_retrieved(args,'member-no-2fa.csv', query_keys, parsed_results)
 
-    # results_nameless_members = get_nameless_users(
-    #     args,
-    #     query_keys,
-    #     retrieve_members(args),
-    #     WHITELISTED_MEMBERS)
-    # # write_csv_detail_retrieved(args, 'members_nameless.csv', query_keys, parsed_results)
+    results_nameless_members = get_nameless_users(
+        args,
+        query_keys,
+        retrieve_members(args),
+        WHITELISTED_MEMBERS)
+    # write_csv_detail_retrieved(args, 'members_nameless.csv', query_keys, parsed_results)
 
-    # merged_members = merge_2fa_nameless_users(
-    #     args,
-    #     list_2fa_disabled_members,
-    #     results_nameless_members,
-    #     query_keys)
-    # write_csv_detail_retrieved(args, 'members_nameless_merged.csv', report_keys, merged_members)
+    merged_members = merge_2fa_nameless_users(
+        args,
+        list_2fa_disabled_members,
+        results_nameless_members,
+        query_keys)
+    write_csv_detail_retrieved(args, 'members_nameless_merged.csv', report_keys, merged_members)
 
 
     # outside contributor mgmt

@@ -6,7 +6,7 @@ WHITELISTED_MEMBERS = [
     ]
 
 KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
-        'BaseApe',
+        'BaseApe', # Orphaned bot that has access to repo of Payroll tribe
         'bumblenauts',
         'appsecure', # exteral contactors
         'ausydautobuilds', # by all teamcity builds in Sydney
@@ -23,7 +23,7 @@ KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
         'SalesforceGuru',
         'poopdeck-pappy'
         'alfred-mintwireless',
-        'awshelpers',
+        'awshelpers', # used for Travis Build. login in PE's 1password account
         'banking-robot',
         'billflowci',  # cash-out tribe @thiago.campezzi
         'bsdmonitoruser',
@@ -33,7 +33,9 @@ KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
         'myob-ad-build-agent',
         'myob-online-tax-deploy',
         'myob-builder',
-        'myob-mobile-team', # cash-in tribe @andyk or @walid
         'myobbsduser',
         'ledgercache-jenkins',
+        'desdrury', # Vibrato k8s consultant
+        'Alfred-mintwireless', #MINT-WIRELESS
+        'victrubajic', #MINT-WIRELESS
     ]

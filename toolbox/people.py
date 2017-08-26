@@ -93,12 +93,11 @@ def get_nameless_users(args, keys, all_org_users, whitelist):
 
 def merge_2fa_nameless_users(args, list_2fa, list_nameless, keys):
 
-    nameless_users_logins = []
-
-    for user_detail in list_nameless:
-        # user_detail['reject_reason'] = 'invalid name'
-        nameless_users_logins.append(user_detail['login'])
-
+    # nameless_users_logins = []
+    # for user_detail in list_nameless:
+    #     # user_detail['reject_reason'] = 'invalid name'
+    #     nameless_users_logins.append(user_detail['login'])
+    nameless_users_logins = [user_detail['login'] for user_detail in list_nameless]
     for two_fa_disabled_user in list_2fa:
         if two_fa_disabled_user not in nameless_users_logins:
             print('expanding original list with 2fa-disabled-only user: {}'.format(two_fa_disabled_user))

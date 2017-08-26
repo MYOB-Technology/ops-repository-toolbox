@@ -8,7 +8,9 @@ env
 *.sublime-project
 *.sublime-workspace
 *.csv
+*.xlsx
 *.db
 
 # Not ready/necessary to commit to remote repo
 .DS_Store
+notice_slack_nameless_users

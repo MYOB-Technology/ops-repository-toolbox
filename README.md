@@ -20,11 +20,11 @@ For security reasons, we need to enforce:
 - machine users should all be outside collaborators
 
 
-1 Kick alumni out
+2 Kick alumni out
 
 It is hard for a large organisation's Github repository maintainers to know if an user in the Github organisation is no longer working for the org and should be removed.
 
-1 New-Starter manual burden
+3 New-Starter manual burden
 
 New team members need to come to us repo maintainers to request write access. Ideally, new members should be given access automatically if their name could be found in Active Directory service. _And Dev Leads should be assigned as team admin who can self-manage_
 
