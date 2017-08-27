@@ -1,6 +1,10 @@
+certifi==2017.7.27.1
+chardet==3.0.4
 hurry.filesize==0.9
-requests==2.13.0
+idna==2.6
+requests==2.18.4
 six==1.10.0
 uritemplate==3.0.0
 uritemplate.py==3.0.2
 urllib==1.21.1
+urllib3==1.22

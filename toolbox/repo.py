@@ -9,7 +9,8 @@ def get_readible_file_size(filesize):
 
 def get_repo_size(args):
 
-    print('\n','getting info for SUM size of Github repo for org : {}'.format(args.user))
+    print('\n','getting info for SUM size of ',
+        'Github repo for org : {}'.format(args.user))
     single_request = False
     template = 'https://{0}/orgs/{1}/repos'.format(
         get_github_api_host(args),

@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+if __name__ == "__main__" and __package__ is None:
+    from sys import path
+    from os.path import dirname as dir
+    path.append(dir(path[0]))
+    __package__ = "examples"
+
+import requests
+print (requests.__file__)
+import json
+from toolbox.people import *
+from toolbox.cli import parse_args
+from toolbox.api_requests import *
+
+def main():
+    args, unknown = parse_args()
+    print (args)
+
+    api = ApiSession(args)
+    api.auth = ('users', 'pass')
+    print(api.auth)
+
+    no_2fa_members = retrieve_members(api, args, get_2fa_disabled=True)
+
+    for member in no_2fa_members:
+        print(member['login'])
+    print(len(no_2fa_members))
+
+if __name__ == '__main__':
+    main()

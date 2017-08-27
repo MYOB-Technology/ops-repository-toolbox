@@ -17,6 +17,10 @@ KNOWN_MACHINE_OUTSIDE_CONTRIBUTORS = [
         'MonkeyMagicIntegration',
         'myob-andromeda-bot', # Andromeda team
         'myobgithub',
+         #  in this context myob-developers refers to the
+         # 3rd party developers that are building apps/add-ons on top of the
+         # public ARL API. ARL API .Net SDK is open source, enhanced and
+         # maintained by MYOB and the community as well.
         'myob-developers',
         'myob-platform-enablement-bot',
         'MYOB-TaxOnline',

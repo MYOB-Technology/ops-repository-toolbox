@@ -55,7 +55,8 @@ def main():
         list_2fa_disabled_members,
         results_nameless_members,
         query_keys)
-    write_csv_detail_retrieved(args, 'members_nameless_merged.csv', report_keys, merged_members)
+    write_csv_detail_retrieved(args, 'members_nameless_merged.csv',
+        report_keys, merged_members)
 
 
     # outside contributor mgmt
@@ -79,7 +80,8 @@ def main():
         list_2fa_disabled_oc,
         results_nameless_oc,
         query_keys)
-    write_csv_detail_retrieved(args, 'outside_contributors_merged.csv', report_keys, merged_oc)
+    write_csv_detail_retrieved(args, 'outside_contributors_merged.csv',
+        report_keys, merged_oc)
 
 
 if __name__ == '__main__':

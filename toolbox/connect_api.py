@@ -29,14 +29,11 @@ def get_github_api_host(args):
     #     host = args.github_host + '/api/v3'
     # else:
     host = 'api.github.com'
-
     return host
 
 
 def get_auth(args, encode=False):
-
     auth = None
-
     if args.token:
         # for 'using Personal-Token to auth against Github API V3'
         # scenario: the Org enforced 2FA where Username+Password
@@ -44,7 +41,6 @@ def get_auth(args, encode=False):
         auth = ' token ' + args.token
     if not auth:
         return None
-
     return auth
 
 
@@ -84,17 +80,16 @@ def _request_url_error(template, retry_timeout):
     # But we won't crash and not back-up the rest now
     print('{} timed out'.format(template))
     retry_timeout -= 1
-
     if retry_timeout >= 0:
         return True
-
-    print('{} timed out to much, skipping!')
+    print('{} timed out too much, skipping!')
     return False
 
 
 def get_query_args(query_args=None):
     if not query_args:
         query_args = {}
+    print("query_args", query_args)
     return query_args
 
 
@@ -150,7 +145,6 @@ def retrieve_data(args, template, query_args=None, single_request=False):
         if status_code != 200:
             # template = 'API request returned HTTP {0}: {1}'
             # errors.append(template.format(status_code, r.reason))
-            # print(errors)
             # print(errors)
             print(status_code,r.reason)
 
